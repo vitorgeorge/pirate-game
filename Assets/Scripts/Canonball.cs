@@ -7,6 +7,12 @@ public class Canonball : MonoBehaviour
 
     private Camera _camera;
 
+    private int _shotsReceived;
+
+    private bool _shoted = false;
+
+
+    public Sprite _damagedShip;
     private void Awake()
     {
         _camera = Camera.main;
@@ -15,11 +21,10 @@ public class Canonball : MonoBehaviour
     {
         if (collision.GetComponent<EnemyMovement>())
         {
-            HealthController healthController = collision.GetComponent<HealthController>();
-            healthController.TakeDamage(10);
+            GameController._killCount++;
+            collision.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = _damagedShip;
             Destroy(collision.gameObject);
-            gameObject.GetComponent<Animator>().enabled = true;
-            //Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
     private void Update()
@@ -29,10 +34,13 @@ public class Canonball : MonoBehaviour
 
     private void DestroyWhenOffScreen()
     {
-        Vector2 screenPosition = _camera.WorldToScreenPoint(transform.position);
 
-        if (screenPosition.x < 0 || screenPosition.x > _camera.pixelWidth || screenPosition.y < 0 || screenPosition.y > _camera.pixelHeight){
-            Destroy(gameObject);
-        }
+            Vector2 screenPosition = _camera.WorldToScreenPoint(transform.position);
+
+            if (screenPosition.x < 0 || screenPosition.x > _camera.pixelWidth || screenPosition.y < 0 || screenPosition.y > _camera.pixelHeight)
+            {
+                Destroy(gameObject);
+            }
+        
     }
 }
